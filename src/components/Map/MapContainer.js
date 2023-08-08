@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 
-const { kakao } = window;
+const {kakao} = window;
 
-const MapContainer = ({ searchPlace }) => {
+const MapContainer = ({searchPlace}) => {
   //받아온 위도,경도 상태변경
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
@@ -22,21 +22,21 @@ const MapContainer = ({ searchPlace }) => {
             setLongitude(position.coords.longitude);
           },
           (error) => {
-            console.error("cannot find location", error);
+            console.error('cannot find location', error);
           }
         );
       } else {
-        console.error("Geolocation is not supported by this browser.");
+        console.error('Geolocation is not supported by this browser.');
       }
     };
     getLocation();
 
     // 카카오 맵 API
-    let infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
-    const container = document.getElementById("myMap");
+    let infowindow = new kakao.maps.InfoWindow({zIndex: 1});
+    const container = document.getElementById('myMap');
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude), //현재위치 입력
-      level: 3,
+      level: 4,
     };
     const map = new kakao.maps.Map(container, options);
 
@@ -67,12 +67,12 @@ const MapContainer = ({ searchPlace }) => {
       });
 
       // 마커에 클릭이벤트 등록
-      kakao.maps.event.addListener(marker, "click", function () {
+      kakao.maps.event.addListener(marker, 'click', function () {
         // 마커를 클릭시 장소명 인포윈도우에 표출
         infowindow.setContent(
           '<div style="padding:5px;font-ize:12px;">' +
-          place.place_name +
-          "</div>"
+            place.place_name +
+            '</div>'
         );
         infowindow.open(map, marker);
       });
@@ -81,19 +81,10 @@ const MapContainer = ({ searchPlace }) => {
 
   return (
     <>
-      <div
-        className="w-[300px] h-[300px]"
-        id="myMap"
-      ></div>
-      <div
-        id="result-list"
-        className=" overflow-y-auto h-[260px] pb-[24px];"
-      >
+      <div className="w-[300px] h-[300px]" id="myMap"></div>
+      <div id="result-list" className=" overflow-y-auto h-[260px] pb-[24px];">
         {Places.map((item, i) => (
-          <div
-            key={i}
-            className="mt-[20px] mx-[20px]"
-          >
+          <div key={i} className="mt-[20px] mx-[20px]">
             <div>
               <h5 className="mb-[5px]">
                 <span className="mr-[10px]">{i + 1}.</span>
@@ -106,22 +97,16 @@ const MapContainer = ({ searchPlace }) => {
                   {item.place_name}
                 </a>
               </h5>
-              {item.road_address_name
-                ? (
-                  <div>
-                    <span>{item.road_address_name}</span>
-                    <a href={item.place_url} target="_blank" rel="noreferrer"></a>
-                    <span>{item.address_name}</span>
-                  </div>
-                )
-                : (
+              {item.road_address_name ? (
+                <div>
+                  <span>{item.road_address_name}</span>
+                  <a href={item.place_url} target="_blank" rel="noreferrer"></a>
                   <span>{item.address_name}</span>
-                )}
-              <span
-                className="text-[#777]"
-              >
-                {item.phone}
-              </span>
+                </div>
+              ) : (
+                <span>{item.address_name}</span>
+              )}
+              <span className="text-[#777]">{item.phone}</span>
             </div>
           </div>
         ))}
